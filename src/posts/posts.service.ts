@@ -123,4 +123,33 @@ export class PostsService {
             }
         };
     }
+
+    async getRegularPostsAndOneSponsered(): Promise<PostResponse> {
+        const posts = await this.postsRepository.find({
+            where: {
+                isSponsored: false
+            }
+        });
+        const sponsoredPosts = await this.postsRepository.find({
+            where: {
+                isSponsored: true
+            }
+        });
+        const regularPostCount = posts.length;
+        const sponsoredPostCount = sponsoredPosts.length;
+        const result: Post[] = [];
+        for (let i = 0; i < regularPostCount; i++) {
+            result.push(posts[i]);
+            if ((i + 1) % 5 === 0 && sponsoredPostCount > 0) {
+                result.push(sponsoredPosts[(i + 1) / 5 - 1]);
+            }
+        }
+        return {
+            message: `Regular Posts with Sponsored Posts`,
+            data: {
+                posts: result
+            }
+        };
+    }
+
 }

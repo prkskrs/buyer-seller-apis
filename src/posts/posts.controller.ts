@@ -38,6 +38,11 @@ export class PostsController {
         return this.postsServices.getSponsoredPosts();
     }
 
+    @Get('regular-sponsered')
+    async getRegularPostsAndOneSponsered() : Promise<PostResponse> {
+        return await this.postsServices.getRegularPostsAndOneSponsered();
+    }
+
     @Get('/')
     listPost(): Promise<PostResponse> {
         return this.postsServices.listPost();
