@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { CreateCatalogueDto, UpdateCatalogueDto } from './catalogue.dto';
 import { CatalogueService } from './catalogue.service';
 import { ApiTags } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
 interface CatalogueResponse {
     message: string;
     data?: any;
@@ -13,9 +14,12 @@ export class CatalogueController {
     constructor(private catalogueServices: CatalogueService) { }
 
     @Post('/create')
-    async createCatalogue(@Body() body: CreateCatalogueDto) {
-        return this.catalogueServices.createCatalogue(body);
+    @UseInterceptors(FilesInterceptor('pdfUrls'))
+    async createCatalogue(@Body() body: CreateCatalogueDto, @UploadedFiles() files) {
+        console.log(1);
+        return this.catalogueServices.createCatalogue(body, files);
     }
+
 
     @Patch('/update/:id')
     async updateCatalogue(@Param('id') id: number, @Body() body: UpdateCatalogueDto): Promise<CatalogueResponse> {

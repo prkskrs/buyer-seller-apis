@@ -9,7 +9,7 @@ export class Post {
     @ManyToOne(() => User)
     sellerId: number;
 
-    @Column({ type: 'varchar', array: true, default: [] })
+    @Column({ type: 'simple-array', default: [] })
     imageUrls: string[];
 
     @Column()

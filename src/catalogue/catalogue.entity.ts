@@ -12,8 +12,8 @@ export class Catalogue {
     @Column()
     name: string;
 
-    @Column()
-    pdfUrl: string;
+    @Column({ type: 'simple-array', default: [] })
+    pdfUrls: string[];
 
     @Column()
     isPrivate: boolean;

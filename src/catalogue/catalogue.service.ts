@@ -15,8 +15,12 @@ export class CatalogueService {
         @InjectRepository(Catalogue) private cataloguesRepository: Repository<Catalogue>,
     ) { }
 
-    async createCatalogue(postData: CreateCatalogueDto) {
-        const catalogue = this.cataloguesRepository.create(postData);
+    async createCatalogue(postData: CreateCatalogueDto, files: any[]) {
+        console.log(files);
+        const catalogue = this.cataloguesRepository.create({
+            ...postData,
+            pdfUrls: files.map(file => file.originalname)
+        });
         await this.cataloguesRepository.save(catalogue);
         return {
             message: "Catalogue Created Successfully",

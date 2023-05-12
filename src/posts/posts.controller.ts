@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreatePostDto, UpdatePostDto } from './posts.dto';
 import { PostsService } from './posts.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
+
 
 interface PostResponse {
     message: string;
@@ -14,8 +16,9 @@ export class PostsController {
     constructor(private postsServices: PostsService) { }
 
     @Post('/create')
-    async createPost(@Body() body: CreatePostDto) {
-        return this.postsServices.createPost(body);
+    @UseInterceptors(FilesInterceptor('imageUrls'))
+    async createPost(@Body() body: CreatePostDto, @UploadedFiles() files) {
+        return this.postsServices.createPost(body, files);
     }
 
     @Patch('/update/:id')
@@ -39,7 +42,7 @@ export class PostsController {
     }
 
     @Get('regular-sponsered')
-    async getRegularPostsAndOneSponsered() : Promise<PostResponse> {
+    async getRegularPostsAndOneSponsered(): Promise<PostResponse> {
         return await this.postsServices.getRegularPostsAndOneSponsered();
     }
 

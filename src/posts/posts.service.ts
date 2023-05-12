@@ -17,9 +17,13 @@ export class PostsService {
         // private usersServices: UsersService
     ) { }
 
-    async createPost(postData: CreatePostDto) {
+    async createPost(postData: CreatePostDto, files: any[]) {
         // const user = this.usersServices.findOneById(postData.sellerId);
-        const post = this.postsRepository.create(postData);
+        console.log(files);
+        const post = this.postsRepository.create({
+            ...postData,
+            imageUrls: files.map(file => file.originalname)
+        });
         await this.postsRepository.save(post);
         return {
             message: "Post Created Successfully",
