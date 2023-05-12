@@ -25,26 +25,48 @@ export class BookmarkService {
         private catalogueRepository: Repository<Catalogue>,
     ) { }
 
-    async bookmarkCatalogue(bookmarkBody: CreateBookmarkDto): Promise<Bookmark> {
-        const buyer = await this.userRepository.findOne({ where: { id: bookmarkBody.buyer.id } });
-        // console.log(buyer);
+    async bookmarkCatalogue(bookmarkBody: CreateBookmarkDto): Promise<BookmarkResponse> {
+        const { buyer, catalogue } = bookmarkBody;
 
-        const catalogue = await this.catalogueRepository.findOne({ where: { id: bookmarkBody.catalogue.id } });
-        // console.log(catalogue);
+        const buyerEntity = await this.userRepository
+            .createQueryBuilder('user')
+            .where('user.id = :id', { id: buyer.id })
+            .getOne();
 
-        const bookmark = new Bookmark();
-        bookmark.buyer = buyer;
-        bookmark.catalogue = catalogue;
-        // await this.bookmarkRepository.save(bookmark);
-        return this.bookmarkRepository.save(bookmark);
+        const catalogueEntity = await this.catalogueRepository
+            .createQueryBuilder('catalogue')
+            .where('catalogue.id = :id', { id: catalogue.id })
+            .getOne();
+
+        const bookmark = this.bookmarkRepository.create(
+            {
+                buyer: buyerEntity,
+                catalogue: catalogueEntity,
+            }
+        );
+        await this.bookmarkRepository.save(bookmark);
+        return {
+            message: "Bookmarked Successfully",
+            data: {
+                bookmark
+            }
+        }
     }
 
+
     async removeBookmark(id: number): Promise<BookmarkResponse> {
-        const bookmark = await this.bookmarkRepository.findOne({ where: { id } });
+        const bookmark = await this.bookmarkRepository.createQueryBuilder('bookmark')
+            .leftJoinAndSelect('bookmark.buyer', 'buyer')
+            .leftJoinAndSelect('bookmark.catalogue', 'catalogue')
+            .where('bookmark.id = :id', { id })
+            .getOne();
+
         if (!bookmark) {
             throw new NotFoundException(`Bookmark not found with id: ${id}`);
         }
+
         await this.bookmarkRepository.remove(bookmark);
+
         return {
             message: "Bookmark Deleted",
             data: {
@@ -52,6 +74,7 @@ export class BookmarkService {
             },
         };
     }
+
 
 
     async getBookmarkedCatalogues(buyerId: number): Promise<Catalogue[]> {

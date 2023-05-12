@@ -15,7 +15,7 @@ export class BookmarkController {
     constructor(private bookmarkServices: BookmarkService) { }
 
     @Post('/bookmark-catalogue')
-    async bookmarkCatalogue(@Body() body: CreateBookmarkDto): Promise<Bookmark> {
+    async bookmarkCatalogue(@Body() body: CreateBookmarkDto): Promise<BookmarkResponse> {
         return this.bookmarkServices.bookmarkCatalogue(body);
     }
 
