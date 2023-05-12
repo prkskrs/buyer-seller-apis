@@ -30,7 +30,7 @@ export class UpdateCatalogueDto {
     name: string;
 
     @IsString()
-    pdfUrl: string;
+    pdfUrls: string[];
 
     @IsBoolean()
     isPrivate: boolean;

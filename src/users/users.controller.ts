@@ -3,7 +3,7 @@ import { CreateUserDto, UpdateUserDto, VerifyOtpDto } from './users.dto';
 import { UsersService } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
 
-interface FollowResponse {
+interface UserResponse {
     message: string;
     data?: any;
 }
@@ -25,37 +25,37 @@ export class UsersController {
     }
 
     @Patch('/:id')
-    async updateUser(@Param('id') id: number, @Body() body: UpdateUserDto) {
+    async updateUser(@Param('id') id: number, @Body() body: UpdateUserDto): Promise<UserResponse> {
         return this.userServices.update(id, body);
     }
 
     @Delete('/:id')
-    async deleteUser(@Param('id') id: number) {
+    async deleteUser(@Param('id') id: number): Promise<UserResponse> {
         return this.userServices.remove(id);
     }
 
-    @Get('/')
-    async listUser(){
+    @Get('/list')
+    async listUser(): Promise<UserResponse> {
         return this.userServices.listUser();
     }
 
     @Get('/follow')
-    async followUser(@Query('followerId') followerId: number, @Query('followingId') followingId: number): Promise<FollowResponse> {
+    async followUser(@Query('followerId') followerId: number, @Query('followingId') followingId: number): Promise<UserResponse> {
         return this.userServices.followUser(followerId, followingId);
     }
 
     @Get('/unFollow')
-    async unFollowUser(@Query('followerId') followerId: number, @Query('followingId') followingId: number): Promise<FollowResponse> {
+    async unFollowUser(@Query('followerId') followerId: number, @Query('followingId') followingId: number): Promise<UserResponse> {
         return this.userServices.unFollowUser(followerId, followingId);
     }
 
     @Get('/followers/:userId')
-    async getFollowers(@Param('userId') userId: number) {
+    async getFollowers(@Param('userId') userId: number): Promise<UserResponse> {
         return this.userServices.getFollowers(userId);
     }
 
     @Get('/followings/:userId')
-    async getFollowings(@Param('userId') userId: number) {
+    async getFollowings(@Param('userId') userId: number): Promise<UserResponse> {
         return this.userServices.getFollowings(userId);
     }
 
