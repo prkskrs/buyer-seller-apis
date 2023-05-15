@@ -34,6 +34,13 @@ export class UsersController {
         return this.userServices.remove(id);
     }
 
+    // @Get('/')
+    // async getUserByMobileNumber(@Body() mobileNumber: string) {
+    //     const user = await this.userServices.getUserByMobileNumber(mobileNumber);
+    //     delete user.otp;
+    //     return user;
+    // }
+
     @Get('/list')
     async listUser(): Promise<UserResponse> {
         return this.userServices.listUser();
@@ -59,11 +66,5 @@ export class UsersController {
         return this.userServices.getFollowings(userId);
     }
 
-    @Get('/')
-    async getUserByMobileNumber(@Body() mobileNumber: string) {
-        const user = await this.userServices.getUserByMobileNumber(mobileNumber);
-        delete user.otp;
-        return user;
-    }
 
 }

@@ -1,18 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { User } from 'src/users/users.entity';
-import { Post } from 'src/posts/posts.entity';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class PostReaction {
+export class PostReaction extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    type: 'like' | 'dislike';
+    postId: number;
 
-    @ManyToOne(() => User)
-    user: User;
+    @Column()
+    userId: number;
 
-    @ManyToOne(() => Post)
-    post: Post;
+    @Column({ default: 0 })
+    likeCount: number;
+
+    @Column({ default: 0 })
+    dislikeCount: number;
 }

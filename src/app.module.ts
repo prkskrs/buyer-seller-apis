@@ -17,6 +17,7 @@ import { CatalogueAccessRequest } from './catalogue-access-request/catalogue-acc
 import { PostView } from './post-view/post-view.entity';
 import { Inquiry } from './inquiry/inquiry.entity';
 import { PostReactionModule } from './post-reaction/post-reaction.module';
+import { PostReaction } from './post-reaction/post-reaction.entity';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { PostReactionModule } from './post-reaction/post-reaction.module';
       // username: '<your username>',
       // password: '<your password>',
       database: 'prkskrs',
-      entities: [User, Post, Catalogue, Bookmark, CatalogueAccessRequest, PostView, Inquiry],
+      entities: [User, Post, Catalogue, Bookmark, CatalogueAccessRequest, PostView, Inquiry, PostReaction],
       synchronize: true,
     }),
     UsersModule,

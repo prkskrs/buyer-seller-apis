@@ -138,7 +138,7 @@ export class UsersService {
         return user;
     }
 
-    async getUserByMobileNumber(mobileNumber: string): Promise<User> {
+    async getUserByMobileNumber(mobileNumber: string): Promise<User> {        
         const user = await this.userRepository.createQueryBuilder('user')
             .where('user.mobileNumber = :mobileNumber', { mobileNumber })
             .getOne();
